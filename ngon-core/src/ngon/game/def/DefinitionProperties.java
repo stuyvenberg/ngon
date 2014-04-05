@@ -18,11 +18,6 @@ public class DefinitionProperties extends HashMap<String, Object>
 	private NodeList list;
 	private ElementListIterable iterList;
 	
-	public DefinitionProperties()
-	{
-		super();
-	}
-	
 	public DefinitionProperties(Element xmlel)
 	{
 		super();
@@ -33,6 +28,9 @@ public class DefinitionProperties extends HashMap<String, Object>
 	
 	public DefinitionProperties(Object... kvs)
 	{
+		if(kvs.length % 2 != 0)
+			throw new IllegalArgumentException("kvs not in key/value form (odd number of elements)");
+		
 		for(int i = 0; i < (kvs.length % 2 == 0 ? kvs.length : kvs.length - 1); i += 2)
 			super.put(kvs[i].toString(), kvs[i+1]);
 		
