@@ -1,0 +1,28 @@
+{
+	"id":		"6e6f676e-0000-0010-0000-000000000001",
+	"name":		"Test Set",
+
+	"cards": {
+		"6e6f676e-0000-00f0-0000-000000000001": {
+			"id":		"6e6f676e-0000-00f0-0000-000000000001",
+			"name":		"Test Card 1",
+			"back":		"img/mtg-back.jpg",
+			"front":	"img/mtg-front-unknown.jpg",
+
+			"properties": {
+				"Cost": "WWUUBBRRGG",
+				"Converted Mana Cost": 10,
+				"Supertypes": [ "World" ],
+				"Types": [ "Enchantment", "Creature" ],
+				"Subtypes": [ "Everycard", "Avatar" ],
+				"Rarity": "Mythic Rare",
+				"Rules Text": "Some prototype rules text. This can also be a string; use CDATA when invalid characters are contained.",
+				"Flavor Text": "Some prototype flavor text. Again, this property can also be a string if it's simpler.",
+				"Power": 10,
+				"Toughness": 10,
+				"Loyalty": 0,
+				"Artist": "Starring you!"
+			}
+		}
+	}
+}

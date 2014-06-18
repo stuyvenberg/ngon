@@ -2,13 +2,11 @@ package ngon.game.obj;
 
 import java.util.UUID;
 
-import ngon.game.Player;
-import ngon.game.def.CardDef;
+import ngon.data.def.CardDef;
 
-public class Card
+public class Card extends GameObject
 {
 	public final CardDef type;
-	public final UUID uuid;
 	public final Player owner; // The player that created the card.
 	
 	public Player controller; // The player currently allowed to move/reorient the card.
@@ -17,11 +15,17 @@ public class Card
 	
 	public Card(CardDef type, Player owner, double x, double y, double angle, boolean flipped)
 	{
+		this(UUID.randomUUID(), type, owner, owner, x, y, angle, flipped);
+	}
+	
+	public Card(UUID instanceId, CardDef type, Player owner, Player controller, double x, double y, double angle, boolean flipped)
+	{
+		super(instanceId);
+		
 		this.type = type;
-		this.uuid = UUID.randomUUID(); // TODO: Is this the best option?
 		this.owner = owner;
 
-		this.controller = owner;
+		this.controller = controller;
 		this.x = x;
 		this.y = y;
 		this.angle = angle;

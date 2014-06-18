@@ -1,0 +1,63 @@
+<game id="6e6f676e-0000-0000-0000-000000000001" name="Magic: The Gathering">
+	<property name="default-properties">Type,Cost,Rules Text</property>
+
+	<prototype-card id="626f676e-0000-0010-0000-000000000000" name="Prototype Card: The Everycard" back="img/mtg-back.jpg" front="img/mtg-front-unknown.jpg">
+		<property name="Cost">10WWUUBBRRGG</property>
+		<property name="Converted Mana Cost" type="number">20</property>
+		<property name="Supertype">Legendary</property>
+		<property name="Type">Planeswalker Creature</property>
+		<property name="Subtype">Everycard Avatar</property>
+		<property name="Rarity">Mythic Rare</property>
+		<property name="Rules Text" type="cdata"><![CDATA[Some prototype rules text. This can also be a string; use CDATA when invalid characters are contained.]]></property>
+		<property name="Flavor Text" type="cdata"><![CDATA[Some prototype flavor text. Again, this property can also be a string if it's simpler.]]></property>
+		<property name="Power" type="integer">20</property>
+		<property name="Toughness" type="integer">20</property>
+		<property name="Loyalty" type="integer">5</property>
+		<property name="Artist">Starring you!</property>
+	</prototype-card>
+
+	<variable id="6e6f767e-0000-0030-0000-000000000000" name="Starting Life Total" value="20" />
+
+	<player>
+		<zone id="6e6f767e-0000-0021-0000-000000000000" name="Hand">
+			<gui dock="bottom" display="stack" />
+
+			<property name="visibility" value="owner" />
+		</zone>
+		<zone id="6e6f767e-0000-0021-0000-000000000001" name="Library">
+			<gui dock="bottom" display="single" collapsed="false" />
+
+			<property name="visibility" value="none" />
+			<property name="loadable" type="bool" value="true" />
+		</zone>
+		<zone id="6e6f767e-0000-0021-0000-000000000002" name="Graveyard">
+			<gui dock="bottom" display="single" collapsed="false" />
+
+			<property name="visibility" value="all" />
+		</zone>
+
+		<variable id="6e6f767e-0000-0031-0000-000000000000" name="Life Total" value="${game.getVariable('Starting Life Total')}" />
+	</player>
+
+	<zone id="6e6f767e-0000-0020-0000-000000000000" name="Battlefield">
+		<gui dock="center" display="field" />
+
+		<property name="visibility" value="all" />
+	</zone>
+	<zone id="6e6f767e-0000-0020-0000-000000000001" name="Stack">
+		<gui dock="left" display="stack" collapsed="true" />
+
+		<property name="visibility" value="all" />
+	</zone>
+	<zone id="6e6f767e-0000-0020-0000-000000000002" name="Exile">
+		<gui dock="left" display="field" collapsed="true" />
+
+		<property name="visibility" value="all" />
+	</zone>
+	<zone id="6e6f767e-0000-0020-0000-000000000003" name="Command">
+		<gui dock="right" display="field" collapsed="true" />
+
+		<property name="visibility" value="all" />
+		<property name="loadable" type="bool" value="true" />
+	</zone>
+</game>

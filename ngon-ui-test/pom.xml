@@ -7,9 +7,14 @@
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>ngon-core</artifactId>
+	<artifactId>ngon-ui-test</artifactId>
 
 	<dependencies>
+		<dependency>
+			<groupId>ngon</groupId>
+			<artifactId>ngon-core</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
 		<dependency>
 			<groupId>ngon</groupId>
 			<artifactId>ngon-data</artifactId>

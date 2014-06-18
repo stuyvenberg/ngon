@@ -1,0 +1,58 @@
+UUID format:
+
+{<program id>-<program version>-<???>-<game version>-<game id>}
+
+where
+program id:
+	'ngon' in hex (6e 6f 67 6e)
+
+program version:
+	presently 0. Only a problem if it's higher than the current client's game.
+	
+object class:
+	00: game
+	10: card set
+	20: zone
+	21: per-player zone
+	30: variable
+	31: per-player variable
+	f0: card
+	
+object version:
+	should be incremented if it is incompatible with previous versions for whatever reason
+	
+object id:
+	a unique (within the first three scopes) 12-bit ID for the object.
+	
+	games:
+		1: MtG
+		
+	zones:
+	
+(presently, internal IDs are just fully random.)
+
+Zone GUI hints:
+
+dock:
+	Which edge of the screen to cling/collapse to. Only one thing can be 'center'.
+
+display:
+	How this zone should be shown.
+		'field': X/Y/rotation matters, index determines layering.
+		'stack'/'fan': Show as much of each card as possible. X/Y/rotation ignored, index determines display order.
+		'single': Show only the first (index 0) card, and possibly some indication that there are cards beneath.
+		
+collapsed:
+	If present, the zone is collapsible. True/false for starting collapsed.
+
+Zone properties:
+	
+visibility:
+	Who can see this zone when it is first created. This can change later.
+		'none': No players can see the visible cards in this at first.
+		'controller': Only the zone's controller can see visible cards at first. Outside of <player> zones, effectively 'none' (controller of a shared zone is null)
+		'all': Anyone can see visible cards in this zone. (Face-down cards or cards beneath the top in 'stack' view can't be seen.)
+		
+loadable:
+	In player zones, deck files are allowed to specify the contents of this zone. In shared zones, deck files can specify cards to be added to this zone under the loading player's control.
+	
