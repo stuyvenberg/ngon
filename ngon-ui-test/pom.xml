@@ -22,9 +22,9 @@
 			<version>${ngon-version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.json</groupId>
-			<artifactId>json</artifactId>
-			<version>${json-version}</version>
+			<groupId>com.eclipsesource.minimal-json</groupId>
+			<artifactId>minimal-json</artifactId>
+			<version>${minimal-json-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.beanshell</groupId>

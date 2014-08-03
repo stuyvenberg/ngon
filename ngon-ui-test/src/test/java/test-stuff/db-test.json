@@ -4,7 +4,7 @@
 			"definition": "game-test.json",
 
 			"sets": {
-				"6e6f676e-0000-0010-0000-000000000001": "set-test.json"
+				"6e6f676e-0000-0010-0000-000000000001": "zip:test.zip!/set-test.json"
 			}
 		}
 	}

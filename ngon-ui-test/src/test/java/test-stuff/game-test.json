@@ -2,27 +2,24 @@
 	"id":		"6e6f676e-0000-0000-0000-000000000001",
 	"name":		"Magic: The Gathering",
 
-	"properties":
-	{
+	"properties": {
 		"default-properties":	[ "Types", "Cost", "Rules Text" ]
 	},
 
-	"prototype-card":
-	{
+	"prototype-card": {
 		"id":		"626f676e-0000-0010-0000-000000000000",
 		"name":		"Prototype Card: The Everycard",
 		"back":		"img/mtg-back.jpg",
-		"front":	"img/mtg-front-unknown.jpg",
+		"image":	"img/mtg-front-unknown.jpg",
 
-		"properties":
-		{
+		"properties": {
 			"Cost": "10WWUUBBRRGG",
 			"Converted Mana Cost": 20,
 			"Supertypes": [ "Legendary" ],
 			"Types": [ "Planeswalker", "Creature" ],
 			"Subtypes": [ "Everycard", "Avatar" ],
 			"Rarity": "Mythic Rare",
-			"Rules Text": "Some prototype rules text. This can also be a string; use CDATA when invalid characters are contained.",
+			"Rules Text": "Some prototype rules text.",
 			"Flavor Text": "Some prototype flavor text. Again, this property can also be a string if it's simpler.",
 			"Power": 20,
 			"Toughness": 20,
@@ -31,135 +28,117 @@
 		}
 	},
 
-	"variables":
-	[
-		{
+	"variables": {
+		"6e6f767e-0000-0030-0000-000000000000": {
 			"id":		"6e6f767e-0000-0030-0000-000000000000",
 			"name":		"Starting Life Total",
 			"value":	20
 		}
-	],
+	},
 	
-	"zones":
-	[
-		{
+	"zones": {
+		"6e6f767e-0000-0021-0000-000000000000": {
 			"id":		"6e6f767e-0000-0021-0000-000000000000",
 			"name":		"Hand",
 
-			"gui":
-			{
+			"gui": {
 				"dock": "bottom",
 				"display": "stack"
 			},
 
-			"properties":
-			{
+			"properties": {
 				"visibility":	"owner"
 			}
 		},
-		{
+		"6e6f767e-0000-0021-0000-000000000001": {
 			"id":		"6e6f767e-0000-0021-0000-000000000001",
 			"name":		"Library",
 
-			"gui":
-			{
+			"gui": {
 				"dock": "bottom",
 				"display": "single",
 				"collapsed": false
 			},
 
-			"properties":
-			{
+			"properties": {
 				"visibility":	"none",
 				"loadable":		true
 			}
 		},
-		{
+		"6e6f767e-0000-0021-0000-000000000002": {
 			"id":		"6e6f767e-0000-0021-0000-000000000002",
 			"name":		"Graveyard",
 
-			"gui":
-			{
+			"gui": {
 				"dock": "bottom",
 				"display": "single",
 				"collapsed": false
 			},
 
-			"properties":
-			{
+			"properties": {
 				"visibility":	"all"
 			}
-		},
-	],
+		}
+	},
 
-	"player":
-	{
-		"zones":
-		[
-			{
+	"player": {
+		"zones": {
+			"6e6f767e-0000-0020-0000-000000000000": {
 				"id":		"6e6f767e-0000-0020-0000-000000000000",
 				"name":		"Battlefield",
 
-				"gui":
-				{
+				"gui": {
 					"dock": "center",
-					"display": "field",
+					"display": "field"
 				},
 
-				"properties":
-				{
+				"properties": {
 					"visibility":	"all"
 				}
 			},
-			{
+			"6e6f767e-0000-0020-0000-000000000001": {
 				"id":		"6e6f767e-0000-0020-0000-000000000001",
 				"name":		"Stack",
 
-				"gui":
-				{
+				"gui": {
 					"dock": "left",
 					"display": "stack",
 					"collapsed": true
 				},
 
-				"properties":
-				{
+				"properties": {
 					"visibility":	"all"
 				}
 			},
-			{
+			"6e6f767e-0000-0020-0000-000000000002": {
 				"id":		"6e6f767e-0000-0020-0000-000000000002",
 				"name":		"Exile",
 
-				"gui":
-				{
+				"gui": {
 					"dock": "left",
 					"display": "field",
 					"collapsed": true
 				},
 
-				"properties":
-				{
+				"properties": {
 					"visibility":	"all"
 				}
 			},
-			{
+			"6e6f767e-0000-0020-0000-000000000003": {
 				"id":		"6e6f767e-0000-0020-0000-000000000003",
 				"name":		"Command",
 
-				"gui":
-				{
+				"gui": {
 					"dock": "right",
 					"display": "field",
 					"collapsed": true
 				},
 
-				"properties":
-				{
+				"properties": {
 					"visibility":	"all",
 					"loadable":		true
 				}
-			},
-		]
+			}
+		}
 	}
 }

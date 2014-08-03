@@ -5,10 +5,13 @@ package ngon.data.def;
  */
 public class DefinitionException extends Exception
 {
-
 	public DefinitionException(String string)
 	{
 		super(string);
 	}
 
+	public DefinitionException(String string, Throwable cause)
+	{
+		super(string, cause);
+	}
 }

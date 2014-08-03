@@ -8,8 +8,17 @@
 	<properties>
 		<ngon-version>0.0.0-SNAPSHOT</ngon-version>
 		<beanshell-version>2.0b5</beanshell-version>
-		<json-version>20140107</json-version>
+		<minimal-json-version>0.9.1</minimal-json-version>
+		<guava-version>17.0</guava-version>
 	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>${guava-version}</version>
+		</dependency>
+	</dependencies>
 
 	<build>
 		<plugins>
@@ -17,10 +26,11 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
 </project>
+

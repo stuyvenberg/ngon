@@ -1,6 +1,7 @@
 package ngon.util.array;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import ngon.util.functions.Predicates.Predicate;
 
@@ -29,6 +30,9 @@ public class FilteringIterable<T> implements Iterable<T>
 
 		public T next()
 		{
+			if(!hasNext())
+				throw new NoSuchElementException();
+			
 			T old = next;
 			next = (source.hasNext() ? source.next() : null);
 

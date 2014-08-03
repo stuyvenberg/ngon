@@ -1,23 +1,19 @@
 package ngon.ui.test;
 
-import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.MediaTracker;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.PriorityQueue;
 
+import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.DefaultListModel;
-import javax.swing.GroupLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
@@ -25,44 +21,30 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenu;
-import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableColumnModel;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 
-import ngon.data.Database;
-import ngon.data.def.CardDef;
-import ngon.data.def.GameDef;
-import ngon.data.def.ZoneDef;
-import ngon.util.array.ArrayTools;
-import ngon.util.array.ConcatenatingIterable;
-import ngon.util.array.FilteringIterable;
-import ngon.util.functions.Predicates;
-import ngon.util.functions.Predicates.Predicate;
+import ngon.data.database.Database;
+import ngon.data.database.Database.DatabaseException;
+import ngon.data.def.CardDefinition;
+import ngon.data.def.GameDefinition;
+import ngon.data.def.ZoneDefinition;
+
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 public class DeckBuilder extends JDialog implements ListSelectionListener
 {
 	private static final Icon DEFAULT_IMAGE = new ImageIcon("default-card-image.jpg");
-
-	private static final Predicate<ZoneDef> loadable = new Predicate<ZoneDef>()
-	{
-		public boolean call(final ZoneDef on)
-		{
-			return on.properties.containsKey("loadable") && on.properties.get("loadable").equals(Boolean.TRUE);
-		}
-	};
 
 	private static CardTableModel model(JTable table)
 	{
@@ -71,17 +53,30 @@ public class DeckBuilder extends JDialog implements ListSelectionListener
 
 	private class SwitchGameAction extends AbstractAction
 	{
-		public final GameDef definition;
+		public final GameDefinition definition;
 
-		public SwitchGameAction(final GameDef def)
+		public SwitchGameAction(final GameDefinition def)
 		{
-			super(def.name);
+			super(def.toString());
 			definition = def;
 		}
 
 		public void actionPerformed(ActionEvent e)
 		{
-			DeckBuilder.this.setGameDefinition(definition);
+			try
+			{
+				DeckBuilder.this.setGameDefinition(definition);
+			}
+			catch (IOException ioe)
+			{
+				// TODO Auto-generated catch block
+				ioe.printStackTrace();
+			}
+			catch (DatabaseException dbe)
+			{
+				// TODO Auto-generated catch block
+				dbe.printStackTrace();
+			}
 		}
 	}
 
@@ -141,28 +136,28 @@ public class DeckBuilder extends JDialog implements ListSelectionListener
 	private final JMenu columns;
 	private final JLabel cardPreview;
 	private final JTabbedPane zonePanes;
-	private final Map<ZoneDef, JList<CardDef>> cardLists;
+	private final Map<ZoneDefinition, JList<CardDefinition>> cardLists;
 	private final JTable searchResults;
 
-	private GameDef activeDef;
+	private GameDefinition activeDef;
 
 	protected static class CardTableModel extends AbstractTableModel
 	{
 		private final Database db;
-		private final GameDef definition;
+		private final GameDefinition definition;
 		private final List<String> columnNames;
-		private final List<CardDef> matches;
+		private final List<CardDefinition> matches;
 
-		public CardTableModel(Database db, GameDef def)
+		public CardTableModel(Database db, GameDefinition def) throws IOException, DatabaseException
 		{
 			this.db = db;
 			this.definition = def;
 
 			this.columnNames = new LinkedList<String>();
-			this.matches = ArrayTools.listFromIterable(db.cards(definition));
+			this.matches = Lists.newLinkedList(db.cards(definition));
 			fireTableStructureChanged();
 
-			setExtraColumns((List<String>) def.properties.get("default-properties"));
+			setExtraColumns(def.getProperty("default-properties", new String[] {}));
 		}
 
 		public void setExtraColumns(String... columns)
@@ -196,14 +191,14 @@ public class DeckBuilder extends JDialog implements ListSelectionListener
 			return columnNames.contains(column);
 		}
 
-		public void search(Predicates.Predicate<CardDef>... conditions)
+		public void search(Predicate<CardDefinition>... conditions) throws IOException, DatabaseException
 		{
 			matches.clear();
-			matches.addAll(ArrayTools.listFromIterable(db.cards(definition, new Predicates.All<CardDef>(conditions))));
+			matches.addAll(Lists.newLinkedList(Iterables.filter(db.cards(definition), Predicates.and(conditions))));
 			fireTableDataChanged();
 		}
 
-		public CardDef getRow(int idx)
+		public CardDefinition getRow(int idx)
 		{
 			return matches.get(idx);
 		}
@@ -240,22 +235,23 @@ public class DeckBuilder extends JDialog implements ListSelectionListener
 			switch (columnIndex)
 			{
 			case 0:
-				return matches.get(rowIndex).parentSet.name;
+//				return matches.get(rowIndex).getSet().toString();
+				return "(???)";
 			case 1:
-				return matches.get(rowIndex).name;
+				return matches.get(rowIndex).toString();
 			default:
-				return matches.get(rowIndex).properties.get(columnNames.get(columnIndex - 2));
+				return matches.get(rowIndex).getProperty(columnNames.get(columnIndex - 2), "(no value)");
 			}
 		}
 
 	}
 
-	protected void setGameDefinition(GameDef definition)
+	protected void setGameDefinition(final GameDefinition definition) throws IOException, DatabaseException
 	{
 		if (definition.equals(activeDef))
 			return;
 
-		CardDef proto = definition.cardPrototype;
+		CardDefinition proto = definition.getCardPrototype();
 
 		// Tear down the old information.
 		cardLists.clear();
@@ -268,26 +264,26 @@ public class DeckBuilder extends JDialog implements ListSelectionListener
 		// Build up the new one.
 		searchResults.setModel(new CardTableModel(database, definition));
 
-		ImageIcon ico = new ImageIcon(proto.imageBack.toString());
+		ImageIcon ico = new ImageIcon(ImageIO.read(proto.getImageStream()));
 		ico.getImage().flush();
 		cardPreview.setIcon(ico.getImageLoadStatus() == MediaTracker.COMPLETE ? ico : DEFAULT_IMAGE);
 
 		//@formatter:off
-		Iterable<ZoneDef> zones = new ConcatenatingIterable<ZoneDef>(
-			new FilteringIterable<ZoneDef>(definition.playerZones, loadable),
-			new FilteringIterable<ZoneDef>(definition.sharedZones, loadable)
+		Iterable<ZoneDefinition> zones = Iterables.concat(
+			Iterables.filter(definition.instancedZones(), zone -> zone.getProperty("loadable", false)),
+			Iterables.filter(definition.sharedZones(), zone -> zone.getProperty("loadable", false))
 		);
 		//@formatter:on
 
-		for (ZoneDef def : zones)
+		for (ZoneDefinition def : zones)
 		{
-			JList<CardDef> list = new JList<CardDef>();
+			JList<CardDefinition> list = new JList<CardDefinition>();
 			cardLists.put(def, list);
 
 			zonePanes.addTab(def.toString(), new JScrollPane(list));
 		}
 
-		for (String key : definition.cardPrototype.properties.keySet())
+		for (String key : proto.getPropertyNames())
 			columns.add(new JCheckBoxMenuItem(new EnableColumnAction(key)));
 
 		// Initialize the search results with 'all'. Well, mostly -- large card libraries would obviously suffer here.
@@ -295,7 +291,7 @@ public class DeckBuilder extends JDialog implements ListSelectionListener
 		activeDef = definition;
 	}
 
-	public DeckBuilder(Frame parent, Database db)
+	public DeckBuilder(Frame parent, Database db) throws IOException, DatabaseException
 	{
 		super(parent, "ngon Test UI - Deck Builder");
 
@@ -316,7 +312,7 @@ public class DeckBuilder extends JDialog implements ListSelectionListener
 		));
 		//@formatter:on
 
-		for (GameDef def : db.games())
+		for (GameDefinition def : db.games())
 			gameMenu.add(new JRadioButtonMenuItem(new SwitchGameAction(def)));
 
 		setLayout(new BoxLayout(getContentPane(), BoxLayout.X_AXIS));
@@ -339,28 +335,40 @@ public class DeckBuilder extends JDialog implements ListSelectionListener
 //		cardPreview.setMinimumSize(cardPreview.getPreferredSize());
 //		cardPreview.setMaximumSize(cardPreview.getPreferredSize());
 
-		cardLists = new HashMap<ZoneDef, JList<CardDef>>();
+		cardLists = new HashMap<ZoneDefinition, JList<CardDefinition>>();
 
 		gameMenu.getItem(0).doClick();
-
-		pack();
 
 		searchResults.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		searchResults.setShowHorizontalLines(true);
 		searchResults.setShowVerticalLines(true);
 		searchResults.getSelectionModel().addListSelectionListener(this);
+
+		searchResults.setAutoResizeMode(JTable.AUTO_RESIZE_NEXT_COLUMN);
+
+		pack();
 	}
 
 	@Override
 	public void valueChanged(ListSelectionEvent lse)
 	{
-		ImageIcon icon = new ImageIcon(
-			(searchResults.getSelectedRow() < 0 ?
-				activeDef.cardPrototype.imageBack :
-				model(searchResults).getRow(searchResults.getSelectedRow()).imageFront
-			).toString()
-		);
-		icon.getImage().flush();
-		cardPreview.setIcon(icon);
+		ImageIcon icon;
+		try
+		{
+			icon = new ImageIcon(ImageIO.read(
+				(searchResults.getSelectedRow() < 0 ?
+					activeDef.getCardPrototype().getImageStream() :
+					model(searchResults).getRow(searchResults.getSelectedRow()).getImageStream()
+				)
+			));
+
+			icon.getImage().flush();
+			cardPreview.setIcon(icon);
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

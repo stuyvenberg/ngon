@@ -5,9 +5,9 @@ import java.util.UUID;
 
 import org.w3c.dom.Element;
 
-public class ZoneDef extends Definition
+public class AbstractZoneDef extends AbstractDefinition implements ZoneDefinition
 {
-	public ZoneDef(UUID uuid, String name, Map<String, Object> properties)
+	public AbstractZoneDef(UUID uuid, String name, Map<String, Object> properties)
 	{
 		super(uuid, name, properties);
 		// TODO Auto-generated constructor stub

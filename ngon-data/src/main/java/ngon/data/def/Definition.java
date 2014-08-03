@@ -1,39 +1,14 @@
 package ngon.data.def;
 
-import java.io.Serializable;
-import java.util.Map;
 import java.util.UUID;
 
-import javax.xml.parsers.DocumentBuilderFactory;
+public interface Definition {
+	public UUID getID();
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+	public Iterable<String> getPropertyNames();
 
-public abstract class Definition implements Serializable
-{
-	public final Map<String, Object> properties;
-	public final UUID id;
-	public final String name;
-
-	public Definition(UUID uuid, String name, Map<String, Object> properties)
-	{
-		this.properties = properties;
-		this.id = uuid;
-		this.name = name;
-	}
-
-	public void putProp(String key, Object value)
-	{
-		properties.put(key, value);
-	}
-	
-	public Object getProp(String key)
-	{
-		return properties.get(key);
-	}
-	
-	public String toString()
-	{
-		return name;
-	}
+	public String getProperty(String key);
+	public <T> T getProperty(String key, T defaultValue);
+	public <T> T getProperty(String key, Class<T> clazz) throws DefinitionException;
+	public <T> void putProperty(String key, T value);
 }

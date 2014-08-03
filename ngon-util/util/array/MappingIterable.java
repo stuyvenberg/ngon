@@ -1,6 +1,7 @@
 package ngon.util.array;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import ngon.util.functions.Maps;
 
@@ -26,7 +27,9 @@ public class MappingIterable<U, V> implements Iterable<V>
 		@Override
 		public V next()
 		{
-			// TODO Auto-generated method stub
+			if(!hasNext())
+				throw new NoSuchElementException();
+
 			return map.call(source.next());
 		}
 

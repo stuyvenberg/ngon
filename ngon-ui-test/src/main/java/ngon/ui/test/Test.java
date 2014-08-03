@@ -4,18 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.net.URISyntaxException;
-
-import ngon.data.database.JSONFilesDatabase;
-import ngon.data.def.GameDef;
-import ngon.game.action.Action;
-import ngon.game.action.ActionProducer;
-import ngon.ui.test.LayoutUtils;
-import ngon.util.xml.XmlTools;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -36,9 +27,12 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.xml.parsers.ParserConfigurationException;
 
-import org.xml.sax.SAXException;
+import ngon.data.database.Database;
+import ngon.data.database.Database.DatabaseException;
+import ngon.data.database.JSONDatabase;
+import ngon.game.action.Action;
+import ngon.game.action.ActionProducer;
 
 public class Test extends JFrame implements java.awt.event.ActionListener, ChangeListener, ItemListener, ListSelectionListener
 {
@@ -91,9 +85,11 @@ public class Test extends JFrame implements java.awt.event.ActionListener, Chang
 			public void actionPerformed(ActionEvent ae) {
 				try
 				{
-					new DeckBuilder(Test.this, new JSONFilesDatabase(new File("db-test.json"))).setVisible(true);
+					Database db = new JSONDatabase();
+					db.load(new File("src/test/java/test-stuff/db-test.json").toURI());
+					new DeckBuilder(Test.this, db).setVisible(true);
 				}
-				catch (FileNotFoundException | URISyntaxException e)
+				catch (DatabaseException | IOException e)
 				{
 					// TODO Auto-generated catch block
 					e.printStackTrace();

@@ -1,5 +1,6 @@
 UUID format:
 
+This is just a suggested format to help keep IDs unique; games can use whatever they like, really.
 {<program id>-<program version>-<???>-<game version>-<game id>}
 
 where
@@ -16,7 +17,7 @@ object class:
 	21: per-player zone
 	30: variable
 	31: per-player variable
-	f0: card
+	f*: fully-established card
 	
 object version:
 	should be incremented if it is incompatible with previous versions for whatever reason

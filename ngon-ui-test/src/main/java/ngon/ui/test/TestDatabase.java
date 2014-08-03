@@ -2,37 +2,28 @@ package ngon.ui.test;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.xml.sax.SAXException;
-
-import com.sun.org.apache.xml.internal.security.utils.XMLUtils;
-
-import ngon.data.Database;
-import ngon.data.def.CardDef;
-import ngon.data.def.GameDef;
-import ngon.data.def.SetDef;
-import ngon.util.functions.Predicates;
-import ngon.util.functions.Predicates.Predicate;
-import ngon.util.xml.XmlTools;
+import ngon.data.database.Database;
+import ngon.data.def.AbstractCardDef;
+import ngon.data.def.AbstractGameDef;
+import ngon.data.def.CardDefinition;
+import ngon.data.def.GameDefinition;
+import ngon.data.def.SetDefinition;
 
 public class TestDatabase implements Database
 {
 	public static final String TEST_CARD_NAME = "Test Card";
 	public static final String TEST_GAME_NAME = "Test Game";
 
-	private static final GameDef testGame;
-	private static final CardDef testCard;
+	private static final AbstractGameDef testGame;
+	private static final AbstractCardDef testCard;
 
 	static {
-		GameDef bugger = null;
-		CardDef buggerTo = null;
+		AbstractGameDef bugger = null;
+		AbstractCardDef buggerTo = null;
 		try
 		{
 			Map<String, Object> props = new HashMap<String, Object>();
@@ -40,18 +31,17 @@ public class TestDatabase implements Database
 			props.put("Cost", "WUBRG");
 			props.put("Rules Text", "You r teh winnar!");
 
-			buggerTo = new CardDef(
+			buggerTo = new AbstractCardDef(
 				null,
 				UUID.nameUUIDFromBytes(TEST_CARD_NAME.getBytes()),
 				TEST_CARD_NAME,
 				new URI("img/mtg-front.jpg"),
-				new URI("img/mtg-back.jpg"),
 				props
 			);
 
 			Map<String, Object> gameprops = new HashMap<String, Object>();
 			gameprops.put("default-properties", "Type,Cost,Rules Text");
-			bugger = new GameDef(
+			bugger = new AbstractGameDef(
 				UUID.nameUUIDFromBytes(TEST_GAME_NAME.getBytes()),
 				TEST_GAME_NAME,
 				buggerTo,
@@ -68,79 +58,52 @@ public class TestDatabase implements Database
 	}
 
 	@Override
-	public Iterable<GameDef> games()
-	{
-		return Arrays.asList(testGame);
-	}
-
-	@Override
-	public Iterable<SetDef> cardSets(GameDef forGame)
-	{
-		// TODO Auto-generated method stub
-		return new LinkedList<SetDef>();
-	}
-
-	@Override
-	public Iterable<CardDef> cards(GameDef forGame)
-	{
-		// TODO Auto-generated method stub
-		return new LinkedList<CardDef>(Arrays.asList(testCard));
-	}
-
-	@Override
-	public Iterable<CardDef> cards(GameDef forGame, Predicate<CardDef> search)
-	{
-		// TODO Auto-generated method stub
-		return new LinkedList<CardDef>(Arrays.asList(testCard));
-	}
-
-	@Override
-	public GameDef getGameDefByID(UUID id)
-	{
-		// TODO Auto-generated method stub
-		return testGame;
-	}
-
-	@Override
-	public CardDef getCardDefByID(UUID id)
-	{
-		// TODO Auto-generated method stub
-		return testCard;
-	}
-
-	@Override
-	public SetDef getSetDefByID(GameDef game, UUID id)
+	public GameDefinition game(UUID id) throws DatabaseException
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void installGame(GameDef game) throws DatabaseException
+	public SetDefinition set(GameDefinition gameDef, UUID id) throws DatabaseException
 	{
 		// TODO Auto-generated method stub
-		
+		return null;
 	}
 
 	@Override
-	public void installSet(GameDef game, SetDef set) throws DatabaseException
+	public Iterable<GameDefinition> games() throws DatabaseException
 	{
 		// TODO Auto-generated method stub
-		
+		return null;
+	}
+
+	@Override
+	public Iterable<SetDefinition> sets(GameDefinition game) throws DatabaseException
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Iterable<CardDefinition> cards(GameDefinition game) throws DatabaseException
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
 	public void load(URI source) throws DatabaseException, IOException
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void save(URI destination) throws DatabaseException, IOException
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }
